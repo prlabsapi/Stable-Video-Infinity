@@ -61,7 +61,7 @@ class ModelConfig:
         origin_file_pattern = self.parse_original_file_pattern()
         downloaded_files = glob.glob(origin_file_pattern, root_dir=os.path.join(self.local_model_path, self.model_id))
         download_source = self.parse_download_source()
-        if download_source.lower() == "modelscope":
+        if False #download_source.lower() == "modelscope":
             snapshot_download(
                 self.model_id,
                 local_dir=os.path.join(self.local_model_path, self.model_id),
@@ -69,7 +69,7 @@ class ModelConfig:
                 ignore_file_pattern=downloaded_files,
                 local_files_only=False
             )
-        elif download_source.lower() == "huggingface":
+        elif True #download_source.lower() == "huggingface":
             hf_snapshot_download(
                 self.model_id,
                 local_dir=os.path.join(self.local_model_path, self.model_id),
