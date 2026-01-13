@@ -61,15 +61,7 @@ class ModelConfig:
         origin_file_pattern = self.parse_original_file_pattern()
         downloaded_files = glob.glob(origin_file_pattern, root_dir=os.path.join(self.local_model_path, self.model_id))
         download_source = self.parse_download_source()
-        if False:
-            snapshot_download(
-                self.model_id,
-                local_dir=os.path.join(self.local_model_path, self.model_id),
-                allow_file_pattern=origin_file_pattern,
-                ignore_file_pattern=downloaded_files,
-                local_files_only=False
-            )
-        elif True:
+        try:
             hf_snapshot_download(
                 self.model_id,
                 local_dir=os.path.join(self.local_model_path, self.model_id),
@@ -77,8 +69,37 @@ class ModelConfig:
                 ignore_patterns=downloaded_files,
                 local_files_only=False
             )
-        else:
-            raise ValueError("`download_source` should be `modelscope` or `huggingface`.")
+        except Exception as e:
+            print(e)
+            try:
+                snapshot_download(
+                    self.model_id,
+                    local_dir=os.path.join(self.local_model_path, self.model_id),
+                    allow_file_pattern=origin_file_pattern,
+                    ignore_file_pattern=downloaded_files,
+                    local_files_only=False
+                )
+            except:
+                raise ValueError("`download_source` should be `modelscope` or `huggingface`.")
+                
+        # if False:
+        #     snapshot_download(
+        #         self.model_id,
+        #         local_dir=os.path.join(self.local_model_path, self.model_id),
+        #         allow_file_pattern=origin_file_pattern,
+        #         ignore_file_pattern=downloaded_files,
+        #         local_files_only=False
+        #     )
+        # elif True:
+        #     hf_snapshot_download(
+        #         self.model_id,
+        #         local_dir=os.path.join(self.local_model_path, self.model_id),
+        #         allow_patterns=origin_file_pattern,
+        #         ignore_patterns=downloaded_files,
+        #         local_files_only=False
+        #     )
+        # else:
+        #     raise ValueError("`download_source` should be `modelscope` or `huggingface`.")
         
     def require_downloading(self):
         if self.path is not None:
